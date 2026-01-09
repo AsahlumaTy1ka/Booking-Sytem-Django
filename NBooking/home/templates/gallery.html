@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="gallery-page">
+  <div class="container">
+    <h1>Our Work Gallery</h1>
+    <p class="subtitle">Browse through our latest nail art creations and client transformations</p>
+
+    <div class="gallery-grid">
+      {% for item in gallery_items %}
+      <div class="gallery-item show" data-service="{{ item.service_received|lower }}">
+        <div class="g-item" data-image="{{ item.image.url }}" data-client="{{ item.client_name }}" data-caption="{{ item.caption }}" data-service="{{ item.service_received }}">
+          <div class="image-loading">
+            <div class="loading-spinner"></div>
+          </div>
+          <img src="{{ item.image.url }}" alt="{{ item.caption }}" loading="lazy" onload="this.previousElementSibling.style.display='none'">
+          <div class="g-overlay">
+            <div class="g-content">
+              <h4>{{ item.client_name }}</h4>
+              <p class="service-badge">{{ item.service_received }}</p>
+              <p class="caption">{{ item.caption }}</p>
+              <span class="date">{{ item.date_pub|date:"M j, Y" }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="gallery-empty">
+        <div class="empty-state">
+          <h3>🎨 Coming Soon!</h3>
+          <p>We're working on adding beautiful gallery photos. Check back soon to see our latest creations!</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="gallery-cta">
+      <h2>Ready for Your Transformation?</h2>
+      <p>Book your appointment today and let us create something beautiful for you!</p>
+      <a href="/booking/" class="btn-primary">Book Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox Modal -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-inner">
+    <div class="lightbox-media">
+      <img id="lightbox-img" src="" alt="">
+    </div>
+    <div class="lightbox-meta">
+      <button class="lightbox-close" id="lightbox-close" aria-label="Close lightbox">&times;</button>
+      <h3 id="lightbox-client"></h3>
+      <p class="service-badge" id="lightbox-service"></p>
+      <p id="lightbox-caption"></p>
+      <span class="date" id="lightbox-date"></span>
+    </div>
+  </div>
+</div>
+{% endblock %}

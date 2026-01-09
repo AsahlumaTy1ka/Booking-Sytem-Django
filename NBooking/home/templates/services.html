@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="services-page">
+  <div class="container">
+    <div class="page-header">
+      <h1>Our Services</h1>
+      <p class="subtitle">Discover our complete range of professional nail care services, each designed to pamper and perfect your nails.</p>
+    </div>
+
+    <!-- Service Categories -->
+    <div class="service-categories">
+      <button class="category-btn active" data-category="all">
+        <span>✨ All Services</span>
+      </button>
+      <button class="category-btn" data-category="manicure">
+        <span>💅 Manicures</span>
+      </button>
+      <button class="category-btn" data-category="pedicure">
+        <span>🦶 Pedicures</span>
+      </button>
+      <button class="category-btn" data-category="nail-art">
+        <span>🎨 Nail Art</span>
+      </button>
+      <button class="category-btn" data-category="specialty">
+        <span>💎 Specialty</span>
+      </button>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="services-grid">
+      {% for service in services %}
+      <div class="service-detail-card show" data-category="{% if 'manicure' in service.service_name|lower %}manicure{% elif 'pedicure' in service.service_name|lower %}pedicure{% elif 'art' in service.service_name|lower %}nail-art{% else %}specialty{% endif %}">
+        <div class="service-header">
+          <div class="service-icon">
+            {% if 'manicure' in service.service_name|lower %}💅
+            {% elif 'pedicure' in service.service_name|lower %}🦶
+            {% elif 'art' in service.service_name|lower %}🎨
+            {% elif 'extension' in service.service_name|lower %}💎
+            {% else %}✨{% endif %}
+          </div>
+          <div class="service-info">
+            <h3>{{ service.service_name }}</h3>
+            <div class="price-tag">${{ service.price }}</div>
+          </div>
+        </div>
+        <p class="service-description">{{ service.description }}</p>
+        <div class="service-features">
+          {% if 'manicure' in service.service_name|lower %}
+            <span class="feature">✓ Nail shaping & filing</span>
+            <span class="feature">✓ Cuticle care</span>
+            <span class="feature">✓ Hand massage</span>
+            <span class="feature">✓ Professional polish</span>
+          {% elif 'pedicure' in service.service_name|lower %}
+            <span class="feature">✓ Foot soak & exfoliation</span>
+            <span class="feature">✓ Nail care</span>
+            <span class="feature">✓ Callus removal</span>
+            <span class="feature">✓ Relaxing massage</span>
+          {% elif 'art' in service.service_name|lower %}
+            <span class="feature">✓ Custom design</span>
+            <span class="feature">✓ Hand-painted</span>
+            <span class="feature">✓ Gems & embellishments</span>
+            <span class="feature">✓ Creative patterns</span>
+          {% else %}
+            <span class="feature">✓ Professional service</span>
+            <span class="feature">✓ Quality products</span>
+            <span class="feature">✓ Expert care</span>
+            <span class="feature">✓ Lasting results</span>
+          {% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <div class="services-empty">
+        <div class="empty-state">
+          <h3>💅 Services Coming Soon!</h3>
+          <p>We're working on adding our complete service menu. Check back soon to see all our amazing nail services!</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Pricing Information -->
+    <div class="pricing-info">
+      <h2>Pricing & Packages</h2>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Loyalty Program</h3>
+          <p class="discount">Every 5th visit FREE</p>
+          <p>Earn points with every service for future discounts</p>
+        </div>
+        <div class="pricing-card">
+          <h3>Combo Packages</h3>
+          <p class="discount">Save 15%</p>
+          <p>Manicure + Pedicure combinations available</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="services-cta">
+      <h2>Ready to Treat Yourself?</h2>
+      <p>Book your appointment today and experience the luxury of professional nail care.</p>
+      <div class="cta-buttons">
+        <a href="{% url 'booking' %}" class="btn-primary">Book Appointment</a>
+        <a href="{% url 'gallery' %}" class="btn-secondary">View Our Work</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

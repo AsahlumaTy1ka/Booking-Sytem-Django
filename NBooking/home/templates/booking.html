@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="booking-page">
+    <div class="container">
+      <h1>Book Your Perfect Nails</h1>
+      <p class="subtitle">We can't wait to pamper you! Choose your preferred date and service below, and we'll confirm your appointment within 24 hours.</p>
+      
+      <div class="booking-info">
+        <div class="info-card">
+          <h3>📍 Visit Us</h3>
+          <p>123 Glam Street, Beauty City, BC 12345</p>
+        </div>
+        <div class="info-card">
+          <h3>⏰ Hours</h3>
+          <p>Mon–Fri: 10am–7pm<br>Sat: 10am–6pm<br>Sun: Closed</p>
+        </div>
+        <div class="info-card">
+          <h3>📞 Call Us</h3>
+          <p><a href="tel:+1234567890">(123) 456-7890</a></p>
+        </div>
+      </div>
+
+      <div class="form-container">
+        <h2>Book Your Appointment</h2>
+        <p class="form-intro">Fill out the form below and we'll get back to you within 24 hours to confirm your booking.</p>
+        
+        <form class="booking-form" method="post" action="/booking/">
+          {% csrf_token %}
+          
+          <!-- Personal Information Section -->
+          <div class="form-section">
+            <h3>👤 Your Information</h3>
+            <div class="row">
+              <label>
+                <span>Full Name</span>
+                <input name="name" type="text" required placeholder="Enter your full name">
+              </label>
+              <label>
+                <span>Phone Number</span>
+                <input name="phone" type="tel" required placeholder="(123) 456-7890">
+              </label>
+            </div>
+          </div>
+
+          <!-- Service Selection Section -->
+          <div class="form-section">
+            <h3>💅 Service Details</h3>
+            <div class="row">
+              <label>
+                <span>Service Type</span>
+                <select name="service" required>
+                  <option value="">— Choose a service —</option>
+                  {% for service in services %}
+                  <option value="{{ service.service_name }}">{{ service.service_name }} - ${{ service.price }}</option>
+                  {% endfor %}
+                </select>
+              </label>
+            </div>
+            
+            <div class="row">
+              <label>
+                <span>Preferred Date</span>
+                <input name="date" type="date" required min="{% now 'Y-m-d' %}">
+              </label>
+              <label>
+                <span>Time Preference</span>
+                <select name="time" required>
+                  <option value="">— Select time slot —</option>
+                  <option value="morning">🌅 Morning (10am–12pm)</option>
+                  <option value="afternoon">☀️ Afternoon (12pm–3pm)</option>
+                  <option value="evening">🌙 Evening (3pm–7pm)</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <!-- Special Requests Section -->
+          <div class="form-section">
+            <h3>✨ Special Requests</h3>
+            <label>
+              <span>Notes or Preferences</span>
+              <textarea name="notes" rows="4" placeholder="Tell us about your preferred colors, designs, any allergies, or special requests..."></textarea>
+            </label>
+          </div>
+
+          <!-- Hidden fields for backend processing -->
+          <input type="hidden" name="title" value="">
+          <input type="hidden" name="description" value="">
+          <input type="hidden" name="price" value="67.00">
+
+          <div class="form-actions">
+            <button class="btn-primary" type="submit">
+              <span>📅 Request Booking</span>
+            </button>
+            <a class="btn-ghost" href="/">← Back to Home</a>
+          </div>
+        </form>
+      </div>
+
+      <div class="faq">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-item">
+          <h4>How far in advance should I book?</h4>
+          <p>We recommend booking 1–2 weeks ahead for your preferred time, but we do accept walk-ins based on availability.</p>
+        </div>
+        <div class="faq-item">
+          <h4>What's your cancellation policy?</h4>
+          <p>Free cancellations up to 24 hours before your appointment. Late cancellations may incur a small fee.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Do you use hygienic tools?</h4>
+          <p>Absolutely! We sterilize all tools and follow strict health & safety standards.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

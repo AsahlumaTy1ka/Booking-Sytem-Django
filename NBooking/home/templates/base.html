@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Nail Lux — Beautiful Nails</title>
+	{% load static %}
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'home/styles.css' %}">
+</head>
+<body>
+	<header class="site-header">
+		<div class="container header-inner">
+			<a class="brand" href="/">Nail Lux</a>
+			<button class="burger-menu" id="burger" aria-label="Menu">
+				<span class="burger-line"></span>
+				<span class="burger-line"></span>
+				<span class="burger-line"></span>
+			</button>
+		</div>
+		<nav class="nav" id="nav-menu">
+			<a href="{% url 'home' %}">Home</a>
+			<a href="{% url 'services' %}">Services</a>
+			<a href="{% url 'gallery' %}">Gallery</a>
+			<a href="{% url 'booking' %}" class="cta">Book Appointment</a>
+		</nav>
+	</header>
+
+	<!-- Django Messages -->
+	{% if messages %}
+	<div class="messages-container">
+		<div class="container">
+			{% for message in messages %}
+			<div class="message message-{{ message.tags }}">
+				<span class="message-icon">
+					{% if message.tags == 'success' %}✅
+					{% elif message.tags == 'error' %}❌
+					{% elif message.tags == 'warning' %}⚠️
+					{% elif message.tags == 'info' %}ℹ️
+					{% else %}💬{% endif %}
+				</span>
+				<span class="message-text">{{ message }}</span>
+				<button class="message-close" onclick="this.parentElement.style.display='none'">×</button>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+
+	<main>
+		{% block content %}{% endblock %}
+	</main>
+
+	<footer class="site-footer">
+		<div class="container">
+			<p>© {{ now|date:"Y" }} Nail Lux — All rights reserved</p>
+		</div>
+	</footer>
+
+	<script src="{% static 'home/scripts.js' %}"></script>
+</body>
+</html>
