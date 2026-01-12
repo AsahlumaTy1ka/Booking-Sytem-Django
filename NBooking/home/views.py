@@ -14,9 +14,6 @@ def galleryPage(request):
 
 def bookingPage(request):
     if request.method == 'POST':
-        title = request.POST.get('title')
-        description = request.POST.get('description')
-        price = request.POST.get('price')
         name = request.POST.get('name')
         phone = request.POST.get('phone')
         date = request.POST.get('date')
@@ -26,9 +23,7 @@ def bookingPage(request):
         
       
         appointment = Appointment.objects.create(
-            title=title,
-            description=description,
-            price=price,
+            price=Service.objects.get(service_name=service).price,
             name=name,
             phone=phone,
             date=date,

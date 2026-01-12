@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="container appointments-page">
+  <div class="page-header">
+    <h1>Appointments</h1>
+    <p class="subtitle">View and manage appointments. Search by appointment code or mark appointments done.</p>
+  </div>
+
+  <div class="form-container">
+    <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;margin-bottom:1rem;">
+      <input id="appt-search" type="search" placeholder="Search by code (e.g. AB123)" style="flex:1;padding:0.8rem;border-radius:8px;border:1px solid rgba(0,0,0,0.08);">
+      <button id="appt-search-btn" class="btn-primary">Search</button>
+      <button id="appt-clear-btn" class="btn-ghost">Clear</button>
+    </div>
+
+    {% if appointments %}
+    <div class="appointments-list">
+      <div class="appointments-head" style="display:grid;grid-template-columns:1fr 1fr 1fr 160px 80px;gap:1rem;padding:0.75rem 1rem;border-bottom:1px solid rgba(0,0,0,0.06);font-weight:600;color:var(--muted);">
+        <div>Client</div>
+        <div>Service</div>
+        <div>Date / Time</div>
+        <div>Appointment Code</div>
+        <div>Done</div>
+      </div>
+      <div id="appointments-container">
+        {% for appt in appointments %}
+        <div class="appt-row{% if appt.done %} done{% endif %}" data-code="{{ appt.code }}" data-id="{{ appt.id }}" style="display:grid;grid-template-columns:1fr 1fr 1fr 160px 80px;gap:1rem;padding:0.85rem 1rem;border-bottom:1px solid rgba(0,0,0,0.04);align-items:center;">
+          <div class="appt-client">{{ appt.client_name }}</div>
+          <div class="appt-service">{{ appt.service_name }}</div>
+          <div class="appt-datetime">{{ appt.date }} {{ appt.time }}</div>
+          <div class="appt-code">{{ appt.code }}</div>
+          <div>
+            <label style="display:flex;align-items:center;gap:0.5rem">
+              <input type="checkbox" class="appt-done-checkbox" data-id="{{ appt.id }}" {% if appt.done %}checked{% endif %}>
+              <span class="muted">Done</span>
+            </label>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% else %}
+    <div class="gallery-empty">
+      <div class="empty-state">
+        <h3>No appointments yet</h3>
+        <p>There are currently no appointments to show.</p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+</section>
+{% endblock %}

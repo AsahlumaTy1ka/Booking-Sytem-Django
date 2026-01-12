@@ -799,6 +799,22 @@ body{font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica N
   color: #155724;
 }
 
+/* Appointments page styles */
+.appointments-page { padding: 2rem 0; }
+.appointments-page .page-header { text-align: left; margin-bottom: 1rem; }
+.appointments-list { border-radius: 12px; overflow: hidden; }
+.appt-row { transition: background 0.15s ease, opacity 0.15s ease; }
+.appt-row.done { opacity: 0.55; text-decoration: line-through; background: linear-gradient(135deg,#fff,#fffdf8); }
+.appt-row .appt-code { font-weight:700; color:#4a2231 }
+.appt-row .appt-client { font-weight:600 }
+
+@media (max-width:900px){
+  .appointments-head, .appt-row { grid-template-columns:1fr; grid-auto-rows:min-content; gap:0.5rem !important }
+  .appointments-head { display:none }
+  .appt-row { display:grid !important; grid-template-columns:1fr 1fr; }
+  .appt-row .appt-code { grid-column: 1 / -1 }
+}
+
 .message-error {
   background: linear-gradient(135deg, #f8d7da, #f5c6cb);
   border-color: #f5c6cb;

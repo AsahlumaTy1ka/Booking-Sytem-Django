@@ -103,6 +103,83 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 })
 
+// Appointments page functionality: search by code, toggle done
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('appt-search')
+  const searchBtn = document.getElementById('appt-search-btn')
+  const clearBtn = document.getElementById('appt-clear-btn')
+  const apptsContainer = document.getElementById('appointments-container')
+
+  if (!apptsContainer) return
+
+  function normalize(s){ return (s||'').toString().trim().toLowerCase() }
+
+  function filterByCode(code){
+    const q = normalize(code)
+    const rows = apptsContainer.querySelectorAll('.appt-row')
+    rows.forEach(r=>{
+      const c = normalize(r.dataset.code)
+      if(!q || c.includes(q)) r.style.display = ''
+      else r.style.display = 'none'
+    })
+  }
+
+  if(searchBtn){
+    searchBtn.addEventListener('click',()=> filterByCode(searchInput.value))
+  }
+  if(searchInput){
+    searchInput.addEventListener('keydown',e=>{ if(e.key==='Enter') filterByCode(searchInput.value) })
+  }
+  if(clearBtn){
+    clearBtn.addEventListener('click',()=>{ if(searchInput) searchInput.value=''; filterByCode('') })
+  }
+
+  // CSRF helper (Django cookie)
+  function getCookie(name){
+    let cookieValue = null
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';')
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim()
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+          break
+        }
+      }
+    }
+    return cookieValue
+  }
+
+  apptsContainer.addEventListener('change', async (e)=>{
+    const target = e.target
+    if(target.classList && target.classList.contains('appt-done-checkbox')){
+      const id = target.dataset.id
+      const row = apptsContainer.querySelector(`.appt-row[data-id="${id}"]`)
+      const checked = target.checked
+      // Optimistic UI
+      if(row) {
+        row.classList.toggle('done', checked)
+      }
+
+      // Send toggle to backend — user will implement view/URL
+      try{
+        const csrftoken = getCookie('csrftoken')
+        await fetch(`/appointments/${id}/toggle/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken || ''
+          },
+          body: JSON.stringify({ done: checked })
+        })
+      }catch(err){
+        console.error('Failed to update appointment', err)
+      }
+    }
+  })
+
+})
+
 // Services filtering functionality
 document.addEventListener('DOMContentLoaded', () => {
   const categoryButtons = document.querySelectorAll('.category-btn')
