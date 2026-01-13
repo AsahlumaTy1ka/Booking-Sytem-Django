@@ -2,6 +2,7 @@ from django.forms import ValidationError
 from django.shortcuts import render
 from .models import gallery, Appointment, Service
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     gallery_items = gallery.objects.order_by('-date_pub')[:5]
@@ -45,3 +46,8 @@ def bookingPage(request):
 def servicesPage(request):
     services = Service.objects.all()
     return render(request, 'services.html', context={'services': services})
+
+@login_required
+def AppointmentsAdmin(request):
+    appointments = Appointment.objects.all().order_by('-date_booked')
+    return render(request, 'admin/appointments.html', context={'appointments': appointments})

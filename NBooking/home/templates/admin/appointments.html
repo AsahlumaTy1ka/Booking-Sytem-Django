@@ -27,10 +27,10 @@
       <div id="appointments-container">
         {% for appt in appointments %}
         <div class="appt-row{% if appt.done %} done{% endif %}" data-code="{{ appt.code }}" data-id="{{ appt.id }}" style="display:grid;grid-template-columns:1fr 1fr 1fr 160px 80px;gap:1rem;padding:0.85rem 1rem;border-bottom:1px solid rgba(0,0,0,0.04);align-items:center;">
-          <div class="appt-client">{{ appt.client_name }}</div>
-          <div class="appt-service">{{ appt.service_name }}</div>
+          <div class="appt-client">{{ appt.name }}</div>
+          <div class="appt-service">{{ appt.service }}</div>
           <div class="appt-datetime">{{ appt.date }} {{ appt.time }}</div>
-          <div class="appt-code">{{ appt.code }}</div>
+          <div class="appt-code">{{ appt.appointmentCode }}</div>
           <div>
             <label style="display:flex;align-items:center;gap:0.5rem">
               <input type="checkbox" class="appt-done-checkbox" data-id="{{ appt.id }}" {% if appt.done %}checked{% endif %}>

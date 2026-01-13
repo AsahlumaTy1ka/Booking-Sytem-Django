@@ -17,7 +17,9 @@ class Appointment(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)  
     phone = models.CharField(max_length=20)   
     service = models.CharField(max_length=100) 
-    notes = models.TextField(blank=True)      
+    notes = models.TextField(blank=True)
+    date_booked = models.DateTimeField(auto_now_add=True)   
+    done = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Appointment for {self.name} on {self.date} at {self.time}"
