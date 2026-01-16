@@ -19,6 +19,22 @@
 			</button>
 		</div>
 		<nav class="nav" id="nav-menu">
+			{% if is_admin_section %}
+			<!-- Admin Navigation -->
+			{% if user.is_authenticated %}
+			<a href="{% url 'admin_dashboard' %}">📊 Admin Home</a>
+			<a href="{% url 'appointments_admin' %}">📅 Appointments</a>
+			<a href="{% url 'services_admin' %}">💅 Services</a>
+			<a href="{% url 'gallery_admin' %}">📸 Gallery</a>
+			<span style="margin: 0 auto;"></span>
+			<a href="/">👁️ View Site</a>
+			<form action="{% url 'admin_logout' %}" method="post">
+				{% csrf_token %}
+			<input type="submit" class="cta" value="Logout">
+			</form>
+			{% endif %}
+			{% else %}
+			<!-- Public Navigation -->
 			<a href="{% url 'home' %}">Home</a>
 			<a href="{% url 'services' %}">Services</a>
 			<a href="{% url 'gallery' %}">Gallery</a>
@@ -26,6 +42,7 @@
 			<a href="{% url 'appointments_admin' %}">Appointments</a>
 			{% endif %}
 			<a href="{% url 'booking' %}" class="cta">Book Appointment</a>
+			{% endif %}
 		</nav>
 	</header>
 

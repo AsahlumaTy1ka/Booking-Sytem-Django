@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="container admin-section" style="padding: 2rem 0;">
+  <h1 style="font-family: Playfair Display, serif; color: #4a2231; font-size: 2rem; margin: 0 0 1rem;">Add Gallery Image</h1>
+
+  <div style="background: white; padding: 2.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 600px;">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #4a2231;">Caption</label>
+        <input type="text" name="caption" required placeholder="e.g., Elegant French Manicure" style="width: 100%; padding: 0.75rem; border: 2px solid rgba(0,0,0,0.08); border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #4a2231;">Client Name</label>
+        <input type="text" name="client_name" required placeholder="Client name" style="width: 100%; padding: 0.75rem; border: 2px solid rgba(0,0,0,0.08); border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #4a2231;">Service Received</label>
+        <input type="text" name="service_received" required placeholder="e.g., Gel Manicure" style="width: 100%; padding: 0.75rem; border: 2px solid rgba(0,0,0,0.08); border-radius: 8px; font-size: 1rem;">
+      </div>
+
+      <div style="margin-bottom: 2rem;">
+        <label style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: #4a2231;">Image</label>
+        <input type="file" name="image" required accept="image/*" style="width: 100%; padding: 0.75rem; border: 2px solid rgba(0,0,0,0.08); border-radius: 8px;">
+      </div>
+
+      <div style="display: flex; gap: 1rem;">
+        <button type="submit" class="btn-primary" style="padding: 0.8rem 1.5rem; border: none; cursor: pointer; border-radius: 8px; font-weight: 600;">✅ Add Image</button>
+        <a href="{% url 'gallery_admin' %}" class="btn-ghost" style="padding: 0.8rem 1.5rem; text-decoration: none; border: 2px solid rgba(0,0,0,0.08); border-radius: 8px; display: inline-block;">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

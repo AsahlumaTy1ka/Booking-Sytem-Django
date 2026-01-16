@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="container appointments-page">
+  <div class="page-header">
+    <h1>Appointments</h1>
+    <p class="subtitle">View and manage appointments. Search by appointment code or mark appointments done.</p>
+  </div>
+
+  <div class="form-container">
+    <div class="appt-controls">
+      <input id="appt-search" type="search" placeholder="Search by code (e.g. AB123)" class="appt-search">
+      <div class="appt-button-group">
+        <button id="appt-search-btn" class="btn-primary">Search</button>
+        <button id="appt-clear-btn" class="btn-ghost">Clear</button>
+        <button id="remove-all-btn" class="btn-danger">Remove All</button>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="appt-tabs">
+      <button class="tab-btn active" data-tab="pending" onclick="switchTab('pending', this)">
+        Pending Appointments
+      </button>
+      <button class="tab-btn" data-tab="done" onclick="switchTab('done', this)">
+        Done Appointments
+      </button>
+    </div>
+
+    <!-- Pending Appointments Tab -->
+    <div id="pending-tab" class="tab-content active">
+      {% if appointments %}
+        {% if appointments|dictsort:"done"|first %}
+          <div class="appointments-list">
+            <div class="appointments-head">
+              <div>Client</div>
+              <div>Service</div>
+              <div>Date / Time</div>
+              <div>Appointment Code</div>
+              <div>Action</div>
+            </div>
+            <div id="appointments-container">
+              {% for appt in appointments %}
+                {% if not appt.done %}
+                <div class="appt-row" data-code="{{ appt.code }}" data-id="{{ appt.appointmentCode }}">
+                  <div class="appt-client">{{ appt.name }}</div>
+                  <div class="appt-service">{{ appt.service }}</div>
+                  <div class="appt-datetime">{{ appt.date }} {{ appt.time }}</div>
+                  <div class="appt-code">{{ appt.appointmentCode }}</div>
+                  <div class="appt-actions">
+                    <form method="POST" action="/site-admin/appointments/{{ appt.appointmentCode }}/toggle/" class="mark-done-form">
+                      {% csrf_token %}
+                      <button type="submit" class="btn-primary">Done</button>
+                    </form>
+                  </div>
+                </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <div class="gallery-empty">
+            <div class="empty-state">
+              <h3>No pending appointments</h3>
+              <p>All appointments have been completed.</p>
+            </div>
+          </div>
+        {% endif %}
+      {% else %}
+      <div class="gallery-empty">
+        <div class="empty-state">
+          <h3>No appointments yet</h3>
+          <p>There are currently no appointments to show.</p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Done Appointments Tab -->
+    <div id="done-tab" class="tab-content" style="display:none;">
+      {% if appointments %}
+        {% for appt in appointments %}
+          {% if appt.done %}
+            {% if forloop.first %}
+            <div class="appointments-list">
+              <div class="appointments-head">
+                <div>Client</div>
+                <div>Service</div>
+                <div>Date / Time</div>
+                <div>Appointment Code</div>
+                <div>Actions</div>
+              </div>
+              <div id="done-appointments-container">
+            {% endif %}
+                <div class="appt-row done" data-code="{{ appt.code }}" data-id="{{ appt.appointmentCode }}">
+                  <div class="appt-client">{{ appt.name }}</div>
+                  <div class="appt-service">{{ appt.service }}</div>
+                  <div class="appt-datetime">{{ appt.date }} {{ appt.time }}</div>
+                  <div class="appt-code">{{ appt.appointmentCode }}</div>
+                  <div class="appt-actions">
+                    <form method="POST" action="/site-admin/appointments/{{ appt.appointmentCode }}/toggle/" class="mark-notdone-form">
+                      {% csrf_token %}
+                      <button type="submit" class="btn-secondary">Not Done</button>
+                    </form>
+                    <form method="POST" action="/site-admin/appointments/{{ appt.appointmentCode }}/delete/" class="remove-form">
+                      {% csrf_token %}
+                      <button type="submit" class="btn-danger" onclick="return confirm('Remove this appointment?');">Remove</button>
+                    </form>
+                  </div>
+                </div>
+            {% if forloop.last %}
+              </div>
+            </div>
+            {% endif %}
+          {% endif %}
+        {% empty %}
+        <div class="gallery-empty">
+          <div class="empty-state">
+            <h3>No done appointments</h3>
+            <p>Mark appointments as done to see them here.</p>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+      <div class="gallery-empty">
+        <div class="empty-state">
+          <h3>No appointments yet</h3>
+          <p>There are currently no appointments to show.</p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+</section>
+{% endblock content %}

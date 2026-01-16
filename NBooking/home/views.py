@@ -47,7 +47,3 @@ def servicesPage(request):
     services = Service.objects.all()
     return render(request, 'services.html', context={'services': services})
 
-@login_required
-def AppointmentsAdmin(request):
-    appointments = Appointment.objects.all().order_by('-date_booked')
-    return render(request, 'admin/appointments.html', context={'appointments': appointments})

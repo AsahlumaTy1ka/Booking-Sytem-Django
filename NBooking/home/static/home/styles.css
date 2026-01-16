@@ -9,6 +9,7 @@ body{font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica N
 .brand{font-family:Playfair Display,serif;font-weight:600;color:#3b2b3b;text-decoration:none;font-size:1.4rem}
 .nav{display:flex;align-items:center}
 .nav a{margin-left:1rem;color:var(--muted);text-decoration:none}
+.nav span{flex: 1;}
 .nav .cta{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;padding:0.6rem 1rem;border-radius:999px;text-decoration:none}
 .site-header{backdrop-filter:blur(6px);background:rgba(255,255,255,0.6);position:sticky;top:0;z-index:40;border-bottom:1px solid rgba(0,0,0,0.03)}
 .hero{padding:4rem 0}
@@ -145,6 +146,65 @@ body{font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica N
 .section-actions {
   text-align: center;
   margin-top: 2rem;
+}
+
+/* Mobile responsive styles for booking page */
+@media (max-width: 1024px) {
+  .booking-page h1 { font-size: 2rem; }
+  .subtitle { font-size: 1rem; }
+  .booking-info { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .form-container { padding: 2rem; }
+  .booking-form .row { flex-wrap: wrap; }
+}
+
+@media (max-width: 768px) {
+  .booking-page { padding: 1.5rem 0; }
+  .booking-page h1 { font-size: 1.8rem; margin-bottom: 0.3rem; }
+  .subtitle { font-size: 0.95rem; margin: 0.3rem 0 1.5rem; }
+  
+  .booking-info { grid-template-columns: 1fr; gap: 0.8rem; margin: 1.5rem 0; }
+  .info-card { padding: 1rem; }
+  .info-card h3 { font-size: 1rem; margin-bottom: 0.3rem; }
+  .info-card p { font-size: 0.9rem; }
+  .info-card a { font-size: 0.9rem; }
+  
+  .form-container { padding: 1.5rem; margin: 1.5rem 0; border-radius: 12px; }
+  .form-container h2 { font-size: 1.5rem; margin-bottom: 0.3rem; }
+  .form-intro { font-size: 0.95rem; margin-bottom: 1.5rem; }
+  
+  .form-section { margin-bottom: 1.5rem; padding: 1rem; border-radius: 10px; }
+  .form-section h3 { font-size: 1rem; margin-bottom: 0.8rem; }
+  
+  .booking-form .row { flex-direction: column; gap: 0; margin-bottom: 1rem; }
+  .booking-form label { flex: 1; margin-bottom: 0.8rem; }
+  .booking-form label:last-child { margin-bottom: 0; }
+  .booking-form label span { font-size: 0.9rem; margin-bottom: 0.4rem; }
+  .booking-form input, .booking-form textarea, .booking-form select { 
+    padding: 0.65rem;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+  .booking-form textarea { min-height: 80px; }
+  
+  .form-actions { flex-direction: column; gap: 0.8rem; margin-top: 1.5rem; }
+  .btn-primary {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.95rem;
+    width: 100%;
+    justify-content: center;
+  }
+  .btn-ghost {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.95rem;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .faq { margin-top: 2rem; }
+  .faq h2 { font-size: 1.5rem; }
+  .faq-item { margin-bottom: 1.2rem; }
+  .faq-item h4 { font-size: 0.95rem; margin-bottom: 0.3rem; }
+  .faq-item p { font-size: 0.9rem; }
 }
 
 .btn-secondary {
@@ -803,10 +863,127 @@ body{font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica N
 .appointments-page { padding: 2rem 0; }
 .appointments-page .page-header { text-align: left; margin-bottom: 1rem; }
 .appointments-list { border-radius: 12px; overflow: hidden; }
-.appt-row { transition: background 0.15s ease, opacity 0.15s ease; }
+.appt-row { transition: background 0.15s ease, opacity 0.15s ease; display: grid; grid-template-columns: 1fr 1fr 1fr 160px 120px; gap: 1rem; padding: 0.85rem 1rem; border-bottom: 1px solid rgba(0,0,0,0.04); align-items: center; }
 .appt-row.done { opacity: 0.55; text-decoration: line-through; background: linear-gradient(135deg,#fff,#fffdf8); }
 .appt-row .appt-code { font-weight:700; color:#4a2231 }
 .appt-row .appt-client { font-weight:600 }
+.appointments-head { display: grid; grid-template-columns: 1fr 1fr 1fr 160px 120px; gap: 1rem; padding: 0.75rem 1rem; border-bottom: 1px solid rgba(0,0,0,0.06); font-weight: 600; color: var(--muted); }
+.appt-row.done .appointments-head { grid-template-columns: 1fr 1fr 1fr 160px 180px; }
+.appt-row.done { grid-template-columns: 1fr 1fr 1fr 160px 180px; }
+.appt-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.appt-actions form { margin: 0; }
+.appt-actions button { padding: 0.5rem 0.8rem; font-size: 0.9rem; }
+
+/* Appointments controls */
+.appt-controls { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: stretch; }
+.appt-search { flex: 1; min-width: 200px; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(0,0,0,0.08); font-size: 1rem; }
+.appt-button-group { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.appt-button-group button { white-space: nowrap; }
+
+/* Appointments tabs */
+.appt-tabs { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid rgba(0,0,0,0.08); flex-wrap: wrap; }
+
+/* Tabs styling */
+.tab-btn {
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--muted);
+  transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+  color: var(--primary, #007bff);
+  border-bottom-color: var(--primary, #007bff) !important;
+}
+
+.tab-btn:hover {
+  color: var(--primary, #007bff);
+}
+
+.tab-content {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 1024px) {
+  .appt-row { grid-template-columns: 1fr 1fr 1fr 100px 100px; }
+  .appt-row.done { grid-template-columns: 1fr 1fr 1fr 100px 150px; }
+  .appointments-head { grid-template-columns: 1fr 1fr 1fr 100px 100px; }
+  .appt-button-group { width: 100%; }
+}
+
+@media (max-width: 768px) {
+  .appt-controls { flex-direction: column; }
+  .appt-search { width: 100%; min-width: unset; }
+  .appt-button-group { width: 100%; }
+  .appt-button-group button { flex: 1; }
+  
+  .appt-tabs { gap: 0.5rem; }
+  .tab-btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
+  
+  .appt-row { grid-template-columns: 1fr; }
+  .appt-row.done { grid-template-columns: 1fr; }
+  .appointments-head { display: none; }
+  .appt-row { padding: 1rem; gap: 0.5rem; }
+  
+  .appt-row div:before {
+    content: attr(data-label);
+    font-weight: 600;
+    display: block;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 0.25rem;
+  }
+  
+  .appt-client:before { content: "Client: "; }
+  .appt-service:before { content: "Service: "; }
+  .appt-datetime:before { content: "Date/Time: "; }
+  .appt-code:before { content: "Code: "; }
+  .appt-actions:before { content: "Actions: "; }
+  
+  .appt-actions { gap: 0.5rem; width: 100%; }
+  .appt-actions form { flex: 1; }
+  .appt-actions button { width: 100%; padding: 0.6rem 0.5rem; font-size: 0.85rem; }
+}
 
 @media (max-width:900px){
   .appointments-head, .appt-row { grid-template-columns:1fr; grid-auto-rows:min-content; gap:0.5rem !important }

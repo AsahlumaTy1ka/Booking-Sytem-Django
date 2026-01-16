@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="container admin-section" style="padding: 2rem 0;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h1 style="font-family: Playfair Display, serif; color: #4a2231; font-size: 2rem; margin: 0;">Services Management</h1>
+      <p style="color: #7a6b79; margin: 0.5rem 0 0;">Manage your nail services and pricing</p>
+    </div>
+    <a href="{% url 'add_service' %}" class="btn-primary" style="padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 8px; display: inline-block;">➕ Add Service</a>
+  </div>
+
+  {% if services %}
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+    {% for service in services %}
+    <div style="background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.2s ease;">
+      <h3 style="margin: 0 0 0.5rem; color: #4a2231;">{{ service.service_name }}</h3>
+      <p style="margin: 0.5rem 0; color: #7a6b79; font-size: 0.95rem;">{{ service.description }}</p>
+      <p style="margin: 1rem 0; font-size: 1.3rem; color: #ff7fb1; font-weight: 700;">${{ service.price }}</p>
+      
+      <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+        <a href="{% url 'edit_service' service.id %}" class="btn-secondary" style="flex: 1; padding: 0.6rem; text-decoration: none; border: none; border-radius: 6px; cursor: pointer; text-align: center; background-color: #6c757d; color: white;">✏️ Edit</a>
+        <form method="post" action="{% url 'delete_service' service.id %}" style="flex: 1; margin: 0;">
+          {% csrf_token %}
+          <button type="submit" class="btn-danger" style="width: 100%; padding: 0.6rem; border: none; border-radius: 6px; cursor: pointer; background-color: #dc3545; color: white;" onclick="return confirm('Delete this service?');">🗑️ Delete</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="background: white; padding: 2rem; border-radius: 12px; text-align: center;">
+    <h3 style="color: #4a2231;">No services yet</h3>
+    <p style="color: #7a6b79;">Start by <a href="{% url 'add_service' %}" style="color: #ff7fb1; text-decoration: none;">adding a service</a></p>
+  </div>
+  {% endif %}
+
+  <div style="margin-top: 2rem;">
+    <a href="{% url 'admin_dashboard' %}" class="btn-ghost" style="padding: 0.8rem 1.5rem; text-decoration: none; border: 2px solid rgba(0,0,0,0.08); border-radius: 8px; display: inline-block;">← Back to Dashboard</a>
+  </div>
+</section>
+{% endblock %}

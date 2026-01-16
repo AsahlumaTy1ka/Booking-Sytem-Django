@@ -109,19 +109,42 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchBtn = document.getElementById('appt-search-btn')
   const clearBtn = document.getElementById('appt-clear-btn')
   const apptsContainer = document.getElementById('appointments-container')
+  const doneContainer = document.getElementById('done-appointments-container')
 
-  if (!apptsContainer) return
+  if (!apptsContainer && !doneContainer) return
 
   function normalize(s){ return (s||'').toString().trim().toLowerCase() }
 
   function filterByCode(code){
     const q = normalize(code)
-    const rows = apptsContainer.querySelectorAll('.appt-row')
-    rows.forEach(r=>{
-      const c = normalize(r.dataset.code)
-      if(!q || c.includes(q)) r.style.display = ''
-      else r.style.display = 'none'
-    })
+    
+    // Filter pending appointments
+    if (apptsContainer) {
+      const rows = apptsContainer.querySelectorAll('.appt-row')
+      rows.forEach(r=>{
+        const c = normalize(r.dataset.code)
+        const appointmentCode = normalize(r.querySelector('.appt-code')?.textContent || '')
+        if(!q || c.includes(q) || appointmentCode.includes(q)) {
+          r.style.display = ''
+        } else {
+          r.style.display = 'none'
+        }
+      })
+    }
+    
+    // Filter done appointments
+    if (doneContainer) {
+      const rows = doneContainer.querySelectorAll('.appt-row')
+      rows.forEach(r=>{
+        const c = normalize(r.dataset.code)
+        const appointmentCode = normalize(r.querySelector('.appt-code')?.textContent || '')
+        if(!q || c.includes(q) || appointmentCode.includes(q)) {
+          r.style.display = ''
+        } else {
+          r.style.display = 'none'
+        }
+      })
+    }
   }
 
   if(searchBtn){
@@ -129,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   if(searchInput){
     searchInput.addEventListener('keydown',e=>{ if(e.key==='Enter') filterByCode(searchInput.value) })
+    searchInput.addEventListener('input', ()=> filterByCode(searchInput.value))
   }
   if(clearBtn){
     clearBtn.addEventListener('click',()=>{ if(searchInput) searchInput.value=''; filterByCode('') })
@@ -161,10 +185,11 @@ document.addEventListener('DOMContentLoaded', () => {
         row.classList.toggle('done', checked)
       }
 
-      // Send toggle to backend — user will implement view/URL
+      // Send toggle to backend
+      console.log(target.dataset)
       try{
         const csrftoken = getCookie('csrftoken')
-        await fetch(`/appointments/${id}/toggle/`, {
+        await fetch(`site-admin/appointments/${id}/toggle/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -212,4 +237,86 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   })
 })
+
+// Appointments tab switching
+function switchTab(tabName, buttonElement) {
+  // Hide all tab contents
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.style.display = 'none';
+  });
+  
+  // Remove active class from all buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+    btn.style.borderBottomColor = 'transparent';
+  });
+  
+  // Show selected tab content
+  document.getElementById(tabName + '-tab').style.display = 'block';
+  
+  // Add active class to clicked button
+  buttonElement.classList.add('active');
+  buttonElement.style.borderBottomColor = 'var(--primary, #007bff)';
+}
+
+// Remove all appointments handler
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const removeAllBtn = document.getElementById('remove-all-btn');
+  if (removeAllBtn) {
+    removeAllBtn.addEventListener('click', function() {
+      if (confirm('Are you sure you want to remove ALL appointments? This cannot be undone.')) {
+        // Send request to remove all appointments
+        fetch('/site-admin/appointments/remove-all/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+          }
+        }).then(response => {
+          if (response.ok) {
+            location.reload();
+          }
+        }).catch(error => console.error('Error:', error));
+      }
+    });
+  }
+
+  // Handle form submissions to toggle status and delete
+  document.addEventListener('submit', function(e) {
+    const form = e.target;
+    
+    if (form.classList.contains('mark-done-form') || form.classList.contains('mark-notdone-form') || form.classList.contains('remove-form')) {
+      e.preventDefault();
+      
+      const action = form.getAttribute('action');
+      
+      fetch(action, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken')
+        }
+      }).then(response => {
+        if (response.ok) {
+          location.reload();
+        }
+      }).catch(error => console.error('Error:', error));
+    }
+  });
+});
 

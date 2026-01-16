@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="container admin-section" style="padding: 2rem 0;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+      <h1 style="font-family: Playfair Display, serif; color: #4a2231; font-size: 2rem; margin: 0;">Gallery Management</h1>
+      <p style="color: #7a6b79; margin: 0.5rem 0 0;">Manage gallery images and client work</p>
+    </div>
+    <a href="{% url 'add_gallery' %}" class="btn-primary" style="padding: 0.8rem 1.5rem; text-decoration: none; border-radius: 8px; display: inline-block;">➕ Add Image</a>
+  </div>
+
+  {% if gallery_items %}
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem;">
+    {% for item in gallery_items %}
+    <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.2s ease;">
+      <img src="{{ item.image.url }}" alt="{{ item.caption }}" style="width: 100%; height: 200px; object-fit: cover;">
+      <div style="padding: 1rem;">
+        <h3 style="margin: 0 0 0.5rem; color: #4a2231;">{{ item.caption }}</h3>
+        <p style="margin: 0.3rem 0; color: #7a6b79; font-size: 0.9rem;"><strong>Client:</strong> {{ item.client_name }}</p>
+        <p style="margin: 0.3rem 0; color: #7a6b79; font-size: 0.9rem;"><strong>Service:</strong> {{ item.service_received }}</p>
+        <p style="margin: 0.3rem 0 1rem; color: #7a6b79; font-size: 0.9rem;"><strong>Date:</strong> {{ item.date_pub }}</p>
+        <form method="post" action="{% url 'delete_gallery' item.id %}" style="margin: 0;">
+          {% csrf_token %}
+          <button type="submit" class="btn-danger" style="width: 100%; padding: 0.6rem; border: none; border-radius: 6px; cursor: pointer;" onclick="return confirm('Delete this image?');">🗑️ Delete</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div style="background: white; padding: 2rem; border-radius: 12px; text-align: center;">
+    <h3 style="color: #4a2231;">No gallery items yet</h3>
+    <p style="color: #7a6b79;">Start by <a href="{% url 'add_gallery' %}" style="color: #ff7fb1; text-decoration: none;">adding an image</a></p>
+  </div>
+  {% endif %}
+
+  <div style="margin-top: 2rem;">
+    <a href="{% url 'admin_dashboard' %}" class="btn-ghost" style="padding: 0.8rem 1.5rem; text-decoration: none; border: 2px solid rgba(0,0,0,0.08); border-radius: 8px; display: inline-block;">← Back to Dashboard</a>
+  </div>
+</section>
+{% endblock %}
